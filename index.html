@@ -417,6 +417,49 @@ nav {
 .cta-note b { color: var(--teal); }
 
 /* ══════════════════════════════════════════════════════════════════
+   NOTIFY
+══════════════════════════════════════════════════════════════════ */
+#notify {
+  background: var(--light); padding: 80px 28px;
+  text-align: center; border-top: 1px solid var(--border);
+}
+.notify-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 3.5px;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 14px;
+}
+.notify-h {
+  font-family: Georgia, serif;
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 700; color: var(--navy);
+  line-height: 1.2; margin-bottom: 12px;
+}
+.notify-sub {
+  font-size: 16px; color: var(--gray);
+  max-width: 480px; margin: 0 auto 36px; line-height: 1.6;
+}
+.notify-form {
+  display: flex; gap: 10px; justify-content: center;
+  flex-wrap: wrap; max-width: 500px; margin: 0 auto;
+}
+.notify-form input[type="email"] {
+  flex: 1; min-width: 220px;
+  padding: 14px 18px; border: 1.5px solid var(--border);
+  border-radius: 6px; font-size: 15px; color: var(--navy);
+  background: var(--white); outline: none;
+  transition: border-color .2s;
+}
+.notify-form input[type="email"]:focus { border-color: var(--teal); }
+.notify-form button {
+  padding: 14px 28px; background: var(--teal); color: var(--white);
+  border: none; border-radius: 6px; font-size: 15px; font-weight: 700;
+  cursor: pointer; white-space: nowrap; transition: background .2s;
+}
+.notify-form button:hover { background: #036e67; }
+.notify-note {
+  margin-top: 14px; font-size: 12px; color: var(--gray);
+}
+
+/* ══════════════════════════════════════════════════════════════════
    FOOTER
 ══════════════════════════════════════════════════════════════════ */
 footer {
@@ -856,6 +899,20 @@ footer {
     Excel (.xlsx) · Works in Microsoft Excel &amp; Google Sheets ·
     <b>Instant download</b> · No setup required
   </p>
+</section>
+
+<!-- ══ NOTIFY ═══════════════════════════════════════════════════════ -->
+<section id="notify">
+  <p class="notify-eyebrow">Stay ahead</p>
+  <h2 class="notify-h">New tools launching soon.<br>Be the first to know.</h2>
+  <p class="notify-sub">
+    9 more audit readiness tools in development — Supplier Assessment, HACCP, Allergen Management, and more. Get notified when each one launches.
+  </p>
+  <form class="notify-form" action="https://formspree.io/f/mredlzqn" method="POST">
+    <input type="email" name="email" placeholder="your@email.com" required>
+    <button type="submit">Notify me</button>
+  </form>
+  <p class="notify-note">No spam. One email per new tool. Unsubscribe anytime.</p>
 </section>
 
 <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
