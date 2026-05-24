@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traceability Stress Test — FoodAuditLab</title>
+<meta name="description" content="38 structured questions. Find your traceability gaps before the auditor does. Auto-scoring, maturity model, System Stability Index, and prioritised action log.">
+<style>
+/* ── RESET ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: Arial, sans-serif; color: #1A2B3C; background: #F2F4F7; line-height: 1.65; }
+
+/* ── TOKENS ─────────────────────────────────────────────────────── */
+:root {
+  --navy:  #1A2B3C;
+  --teal:  #048A81;
+  --sky:   #54C6EB;
+  --light: #F2F4F7;
+  --gray:  #8A95A0;
+  --white: #FFFFFF;
+  --dnvy:  #1E3448;
+  --border:#D0D8E4;
+  --red:   #E74C3C;
+  --amber: #F39C12;
+  --green: #27AE60;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+.teal-rule { height: 5px; background: var(--teal); border: none; margin: 0; }
+
+/* ── TYPE ───────────────────────────────────────────────────────── */
+.serif { font-family: Georgia, serif; }
+.eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 3.5px;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 14px;
+}
+.section-h {
+  font-family: Georgia, serif;
+  font-size: clamp(26px, 3.2vw, 42px);
+  font-weight: 700; color: var(--navy);
+  line-height: 1.15; margin-bottom: 14px;
+}
+.section-sub {
+  font-size: 17px; color: var(--gray);
+  max-width: 580px; margin: 0 auto 52px;
+  text-align: center; line-height: 1.6;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════════════════════ */
+nav {
+  background: var(--navy);
+  padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+}
+.nav-brand {
+  font-family: Georgia, serif;
+  font-size: 22px; font-weight: 700; color: var(--white);
+  text-decoration: none; letter-spacing: 0.5px;
+}
+.nav-brand span { color: var(--teal); }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  color: var(--gray); text-decoration: none;
+  font-size: 14px; font-weight: 500; transition: color .2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a.active { color: var(--white); }
+.nav-cta {
+  background: var(--teal); color: var(--white) !important;
+  padding: 9px 22px; border-radius: 6px; font-weight: 700 !important;
+  transition: background .2s !important;
+}
+.nav-cta:hover { background: #037069 !important; color: var(--white) !important; }
+
+/* ── BTN ──────────────────────────────────────────────────────── */
+.btn {
+  display: inline-block; text-decoration: none;
+  padding: 15px 32px; border-radius: 8px; font-size: 16px;
+  font-weight: 700; cursor: pointer; border: none; transition: all .2s;
+}
+.btn-primary { background: var(--teal); color: var(--white); }
+.btn-primary:hover { background: #037069; }
+.btn-ghost {
+  background: transparent; color: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.22);
+}
+.btn-ghost:hover { border-color: var(--white); }
+.btn-outline {
+  background: transparent; color: var(--teal);
+  border: 2px solid var(--teal);
+}
+.btn-outline:hover { background: var(--teal); color: var(--white); }
+
+/* ══════════════════════════════════════════════════════════════════
+   BREADCRUMB
+══════════════════════════════════════════════════════════════════ */
+.breadcrumb {
+  background: var(--dnvy);
+  padding: 12px 28px;
+  font-size: 13px; color: var(--gray);
+}
+.breadcrumb a { color: var(--teal); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span { margin: 0 8px; }
+
+/* ══════════════════════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════════════════════ */
+#hero {
+  background: var(--navy);
+  padding: 72px 28px 80px;
+  overflow: hidden; position: relative;
+}
+#hero::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 50%; height: 100%;
+  background: radial-gradient(ellipse at top right, rgba(4,138,129,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 340px;
+  gap: 64px; align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(4,138,129,0.15); border: 1px solid rgba(4,138,129,0.4);
+  padding: 7px 18px; border-radius: 999px;
+  font-size: 12px; color: var(--sky); margin-bottom: 22px;
+}
+.hero-eyebrow::before { content: '●'; font-size: 8px; color: var(--teal); }
+.hero-h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(32px, 4.5vw, 60px);
+  font-weight: 700; color: var(--white);
+  line-height: 1.08; margin-bottom: 18px;
+}
+.hero-h1 em { color: var(--teal); font-style: normal; }
+.hero-tagline {
+  font-size: 18px; color: var(--sky);
+  margin-bottom: 16px; font-style: italic; font-family: Georgia, serif;
+}
+.hero-p {
+  font-size: 16px; color: var(--gray);
+  max-width: 500px; margin-bottom: 36px; line-height: 1.65;
+}
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-meta {
+  margin-top: 22px; display: flex; gap: 24px; flex-wrap: wrap;
+}
+.hero-meta-item {
+  font-size: 13px; color: var(--gray);
+  display: flex; align-items: center; gap: 6px;
+}
+.hero-meta-item::before { content: '✓'; color: var(--teal); font-weight: 900; }
+.hero-img {
+  position: relative; z-index: 1;
+}
+.hero-img img {
+  width: 100%; border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PRICE BAND
+══════════════════════════════════════════════════════════════════ */
+#price-band {
+  background: var(--teal); padding: 22px 28px;
+}
+.price-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.price-left { display: flex; align-items: center; gap: 24px; }
+.price-tag {
+  font-family: Georgia, serif; font-size: 42px; font-weight: 700;
+  color: var(--white); line-height: 1;
+}
+.price-details { color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.6; }
+.price-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+.price-chip {
+  background: rgba(255,255,255,0.18); color: var(--white);
+  font-size: 12px; font-weight: 600; padding: 5px 14px;
+  border-radius: 999px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   WHAT'S INSIDE
+══════════════════════════════════════════════════════════════════ */
+#inside {
+  background: var(--white); padding: 88px 28px;
+  text-align: center;
+}
+.areas-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; max-width: 1100px; margin: 0 auto;
+}
+.area-card {
+  background: var(--light); border-radius: 14px;
+  padding: 28px 24px; text-align: left;
+  border: 1.5px solid var(--border);
+  transition: box-shadow .2s, transform .2s;
+}
+.area-card:hover {
+  box-shadow: 0 6px 24px rgba(26,43,60,0.09);
+  transform: translateY(-2px);
+}
+.area-letter {
+  display: inline-block; width: 36px; height: 36px; border-radius: 8px;
+  background: var(--teal); color: var(--white);
+  font-family: Georgia, serif; font-size: 18px; font-weight: 700;
+  text-align: center; line-height: 36px; margin-bottom: 14px;
+}
+.area-name {
+  font-family: Georgia, serif; font-size: 17px;
+  font-weight: 700; color: var(--navy); margin-bottom: 6px;
+}
+.area-desc { font-size: 13px; color: var(--gray); line-height: 1.55; }
+.area-count {
+  display: inline-block; margin-top: 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--teal);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   WHAT YOU GET
+══════════════════════════════════════════════════════════════════ */
+#features {
+  background: var(--navy); padding: 88px 28px;
+  text-align: center;
+}
+#features .section-h { color: var(--white); }
+#features .section-sub { color: var(--gray); }
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; max-width: 1100px; margin: 0 auto;
+}
+.feat-card {
+  background: var(--dnvy); border-radius: 14px;
+  padding: 28px 24px; text-align: left;
+}
+.feat-icon { font-size: 36px; margin-bottom: 16px; line-height: 1; }
+.feat-title {
+  font-size: 15px; font-weight: 700; color: var(--white);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
+}
+.feat-desc { font-size: 14px; color: var(--gray); line-height: 1.6; }
+.feat-card.wide {
+  grid-column: span 3;
+  display: grid; grid-template-columns: 60px 1fr;
+  gap: 0 24px; align-items: start;
+}
+.feat-card.wide .feat-icon { grid-row: span 2; font-size: 44px; margin-top: 4px; }
+
+/* ══════════════════════════════════════════════════════════════════
+   STANDARDS
+══════════════════════════════════════════════════════════════════ */
+#standards {
+  background: var(--light);
+  padding: 52px 28px; text-align: center;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.std-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--gray); margin-bottom: 24px;
+}
+.std-row {
+  display: flex; flex-wrap: wrap;
+  justify-content: center; gap: 12px;
+  max-width: 860px; margin: 0 auto;
+}
+.std-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--white); border: 1.5px solid var(--border);
+  color: var(--navy); font-size: 14px; font-weight: 700;
+  padding: 10px 24px; border-radius: 999px;
+}
+.std-chip::before { content: '✓'; color: var(--teal); font-weight: 900; }
+
+/* ══════════════════════════════════════════════════════════════════
+   WHO IT'S FOR
+══════════════════════════════════════════════════════════════════ */
+#who { background: var(--white); padding: 88px 28px; text-align: center; }
+.who-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 20px; max-width: 1100px; margin: 0 auto;
+}
+.who-card {
+  background: var(--light); border-radius: 14px;
+  padding: 32px 20px; text-align: center;
+}
+.who-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--navy); display: flex;
+  align-items: center; justify-content: center;
+  margin: 0 auto 18px; font-size: 26px;
+}
+.who-card h3 {
+  font-family: Georgia, serif; font-size: 17px;
+  font-weight: 700; color: var(--navy); margin-bottom: 8px;
+}
+.who-card p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+/* ══════════════════════════════════════════════════════════════════
+   HOW IT WORKS
+══════════════════════════════════════════════════════════════════ */
+#how {
+  background: var(--light); padding: 88px 28px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+.steps {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 24px; max-width: 1000px; margin: 0 auto;
+  position: relative;
+}
+.steps::before {
+  content: '';
+  position: absolute; top: 36px; left: 10%; right: 10%;
+  height: 2px; background: var(--border); z-index: 0;
+}
+.step { position: relative; z-index: 1; }
+.step-num {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--navy); color: var(--teal);
+  font-family: Georgia, serif; font-size: 28px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; border: 3px solid var(--teal);
+}
+.step h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.step p  { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+/* ══════════════════════════════════════════════════════════════════
+   FAQ
+══════════════════════════════════════════════════════════════════ */
+#faq {
+  background: var(--white); padding: 88px 28px;
+  text-align: center;
+}
+.faq-list {
+  max-width: 760px; margin: 0 auto;
+  text-align: left;
+}
+.faq-item {
+  border-top: 1px solid var(--border);
+  padding: 22px 0;
+}
+.faq-item:last-child { border-bottom: 1px solid var(--border); }
+.faq-q {
+  font-family: Georgia, serif; font-size: 17px;
+  font-weight: 700; color: var(--navy); margin-bottom: 10px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.faq-q::before {
+  content: 'Q';
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 28px; height: 28px; border-radius: 6px;
+  background: var(--teal); color: var(--white);
+  font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;
+  margin-top: 1px;
+}
+.faq-a { font-size: 15px; color: var(--gray); line-height: 1.65; padding-left: 40px; }
+
+/* ══════════════════════════════════════════════════════════════════
+   CTA
+══════════════════════════════════════════════════════════════════ */
+#cta {
+  background: var(--navy); padding: 96px 28px;
+  text-align: center; position: relative; overflow: hidden;
+}
+#cta::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: var(--teal);
+}
+#cta::after {
+  content: '';
+  position: absolute; bottom: -60px; right: -60px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(4,138,129,0.07), transparent 70%);
+  pointer-events: none;
+}
+.cta-h {
+  font-family: Georgia, serif;
+  font-size: clamp(26px, 3.8vw, 50px);
+  font-weight: 700; color: var(--white);
+  margin-bottom: 16px; position: relative; z-index: 1;
+}
+.cta-p {
+  font-size: 17px; color: var(--gray);
+  max-width: 540px; margin: 0 auto 40px; line-height: 1.6;
+  position: relative; z-index: 1;
+}
+.cta-btns {
+  display: flex; gap: 14px; justify-content: center;
+  flex-wrap: wrap; position: relative; z-index: 1;
+}
+.cta-note {
+  margin-top: 20px; font-size: 13px; color: var(--gray);
+  position: relative; z-index: 1;
+}
+.cta-note b { color: var(--teal); }
+
+/* ══════════════════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════════════════ */
+footer {
+  background: var(--dnvy);
+  padding: 40px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.foot-brand {
+  font-family: Georgia, serif; font-size: 20px;
+  font-weight: 700; color: var(--white);
+}
+.foot-brand span { color: var(--teal); }
+.foot-center { font-size: 13px; color: var(--gray); text-align: center; }
+.foot-tagline {
+  font-size: 13px; font-style: italic;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-img   { display: none; }
+  .areas-grid { grid-template-columns: repeat(2, 1fr); }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .feat-card.wide { grid-column: span 2; }
+  .who-grid   { grid-template-columns: repeat(2, 1fr); }
+  .steps      { grid-template-columns: repeat(2, 1fr); }
+  .steps::before { display: none; }
+}
+@media (max-width: 600px) {
+  nav { padding: 0 16px; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .areas-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-column: 1; grid-template-columns: 1fr; }
+  .feat-card.wide { grid-column: 1; grid-template-columns: 1fr; }
+  .who-grid   { grid-template-columns: 1fr; }
+  .steps      { grid-template-columns: 1fr; }
+  .price-inner { flex-direction: column; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════════ -->
+<nav>
+  <a href="index.html" class="nav-brand">FoodAudit<span>Lab</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#library">All tools</a>
+    <a href="index.html#who">Who it's for</a>
+    <a href="https://payhip.com/b/yfdoR" class="nav-cta" target="_blank">Buy — €79</a>
+  </div>
+</nav>
+
+<!-- ══ BREADCRUMB ════════════════════════════════════════════════════ -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a>
+  <span>›</span>
+  <a href="index.html#library">Tools</a>
+  <span>›</span>
+  Traceability Stress Test
+</div>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Tool 01 · Lot Traceability &amp; Mass Balance</div>
+      <h1 class="hero-h1">
+        Traceability<br><em>Stress Test</em>
+      </h1>
+      <p class="hero-tagline">38 structured questions. Find your gaps before the auditor does.</p>
+      <p class="hero-p">
+        A self-assessment tool built from real audit findings across IFS Food, BRCGS,
+        FSSC 22000 and EU General Food Law. Know exactly where your traceability system
+        stands — before the audit begins.
+      </p>
+      <div class="hero-btns">
+        <a href="https://payhip.com/b/yfdoR" class="btn btn-primary" style="font-size:17px;padding:16px 40px" target="_blank">
+          Get this tool — €79
+        </a>
+        <a href="#inside" class="btn btn-ghost" style="font-size:17px;padding:16px 32px">
+          What's inside ↓
+        </a>
+      </div>
+      <div class="hero-meta">
+        <span class="hero-meta-item">Excel (.xlsx)</span>
+        <span class="hero-meta-item">Instant download</span>
+        <span class="hero-meta-item">45–90 min to complete</span>
+        <span class="hero-meta-item">No setup required</span>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img src="Traceability Product_Images/Traceability_StressTest_Cover_Payhip.png"
+           alt="Traceability Stress Test cover">
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICE BAND ════════════════════════════════════════════════════ -->
+<div id="price-band">
+  <div class="price-inner">
+    <div class="price-left">
+      <div class="price-tag">€79</div>
+      <div class="price-details">
+        One-time purchase · Instant download<br>
+        Excel (.xlsx) · Microsoft Excel &amp; Google Sheets
+      </div>
+    </div>
+    <div class="price-chips">
+      <span class="price-chip">38 questions</span>
+      <span class="price-chip">Auto-scoring</span>
+      <span class="price-chip">Maturity model</span>
+      <span class="price-chip">Action log</span>
+    </div>
+    <a href="https://payhip.com/b/yfdoR" class="btn" target="_blank"
+       style="background:#fff;color:var(--teal);font-size:15px;padding:14px 32px">
+      Buy now →
+    </a>
+  </div>
+</div>
+
+<!-- ══ WHAT'S INSIDE ═════════════════════════════════════════════════ -->
+<section id="inside">
+  <p class="eyebrow" style="text-align:center">38 questions · 6 areas</p>
+  <h2 class="section-h" style="text-align:center">What the Stress Test covers</h2>
+  <p class="section-sub">
+    Each area maps to specific requirements in IFS Food, BRCGS, FSSC 22000,
+    and EU Regulation 178/2002.
+  </p>
+  <div class="areas-grid">
+
+    <div class="area-card">
+      <div class="area-letter">A</div>
+      <div class="area-name">Lot Traceability</div>
+      <div class="area-desc">Incoming materials, semi-finished goods, finished products. One-up / one-down traceability. Lot coding logic and consistency.</div>
+      <span class="area-count">7 questions</span>
+    </div>
+
+    <div class="area-card">
+      <div class="area-letter">B</div>
+      <div class="area-name">Mass Balance</div>
+      <div class="area-desc">Per-batch measurement, variance recording, lot-linked waste and rework, packaging material traceability. The area most commonly misunderstood.</div>
+      <span class="area-count">5 questions</span>
+    </div>
+
+    <div class="area-card">
+      <div class="area-letter">C</div>
+      <div class="area-name">Documentation &amp; Records</div>
+      <div class="area-desc">Real-time completion, retrieval speed, audit trail integrity. Can you pull a full trace in under 4 hours?</div>
+      <span class="area-count">5 questions</span>
+    </div>
+
+    <div class="area-card">
+      <div class="area-letter">D</div>
+      <div class="area-name">System &amp; Controls</div>
+      <div class="area-desc">ERP vs paper, error-prevention controls, mock recall frequency and variation, formal recall procedure and recall team readiness.</div>
+      <span class="area-count">10 questions</span>
+    </div>
+
+    <div class="area-card">
+      <div class="area-letter">E</div>
+      <div class="area-name">Non-Conforming Product</div>
+      <div class="area-desc">Segregation, hold status, release authorisation, documentation of disposition decisions. A common source of major non-conformities.</div>
+      <span class="area-count">4 questions</span>
+    </div>
+
+    <div class="area-card">
+      <div class="area-letter">F</div>
+      <div class="area-name">Supplier Management</div>
+      <div class="area-desc">Approved supplier list, manufacturer visibility through distributors, risk-based supplier monitoring and re-evaluation.</div>
+      <span class="area-count">7 questions</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ WHAT YOU GET ══════════════════════════════════════════════════ -->
+<section id="features">
+  <p class="eyebrow" style="color:var(--sky)">What's included</p>
+  <h2 class="section-h" style="color:var(--white);text-align:center">Five components, one file</h2>
+  <p class="section-sub">
+    Download once. Open in Excel or Google Sheets. No plugins, no subscriptions.
+  </p>
+  <div class="features-grid">
+
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">Live Scoring Dashboard</div>
+      <div class="feat-desc">Overall score out of 76, section breakdown, and compliance % per area — all calculated automatically as you answer.</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">🎯</div>
+      <div class="feat-title">4-Level Maturity Model</div>
+      <div class="feat-desc">Reactive / Controlled / Proactive / Integrated. See exactly which level your system reaches — and what separates you from the next level.</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">📈</div>
+      <div class="feat-title">System Stability Index (SSI)</div>
+      <div class="feat-desc">A unique metric that flags hidden weaknesses. A high overall score can mask a critical gap in one section — SSI makes it visible before your auditor does.</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">⚠️</div>
+      <div class="feat-title">13 Auditor Red Flags</div>
+      <div class="feat-desc">Specific patterns that trigger immediate auditor attention, explained in plain language with examples from real audits.</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">📋</div>
+      <div class="feat-title">Prioritised Action Log</div>
+      <div class="feat-desc">Auto-populated from your scores. Items ranked Critical → High → Medium. Share directly with your team or management before your next audit.</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">📖</div>
+      <div class="feat-title">Reference Guide</div>
+      <div class="feat-desc">What each maturity level looks like in practice, what evidence auditors expect at each stage, and why each control exists in the standards.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ STANDARDS ═════════════════════════════════════════════════════ -->
+<section id="standards">
+  <p class="std-eyebrow">Standards covered</p>
+  <div class="std-row">
+    <span class="std-chip">IFS Food v8</span>
+    <span class="std-chip">BRCGS Food Safety</span>
+    <span class="std-chip">FSSC 22000 v6</span>
+    <span class="std-chip">ISO 22000:2018</span>
+    <span class="std-chip">EU Reg. 178/2002</span>
+  </div>
+</section>
+
+<!-- ══ WHO IT'S FOR ══════════════════════════════════════════════════ -->
+<section id="who">
+  <p class="eyebrow" style="text-align:center">Who it's for</p>
+  <h2 class="section-h" style="text-align:center">Built for the people closest to the audit</h2>
+  <p class="section-sub">No theory. No generic checklists. Built from what auditors actually look for.</p>
+  <div class="who-grid">
+    <div class="who-card">
+      <div class="who-icon">🔍</div>
+      <h3>QA Managers</h3>
+      <p>Preparing for certification or re-certification. Identify gaps before the auditor arrives.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">⚙️</div>
+      <h3>Technical Managers</h3>
+      <p>Understand where your system truly sits — not where your documentation says it does.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">📝</div>
+      <h3>Internal Auditors</h3>
+      <p>Run structured traceability verification exercises with consistent, scored outputs.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">💼</div>
+      <h3>Food Safety Consultants</h3>
+      <p>Assess client readiness systematically. Share a professional, prioritised action log.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══════════════════════════════════════════════════ -->
+<section id="how">
+  <p class="eyebrow" style="text-align:center">How it works</p>
+  <h2 class="section-h" style="text-align:center">From download to action plan in one session</h2>
+  <p class="section-sub">45–90 minutes. No training required.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Download</h3>
+      <p>Open in Excel or Google Sheets. No setup, no plugins, no account needed.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Score yourself</h3>
+      <p>Answer 38 questions across 6 traceability areas. Each question uses a 0–1–2 scale.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>See your results</h3>
+      <p>Dashboard calculates your score, maturity level, and System Stability Index automatically.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Act</h3>
+      <p>The prioritised action log shows exactly what to fix first. Share with your team before the audit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ═══════════════════════════════════════════════════════════ -->
+<section id="faq">
+  <p class="eyebrow" style="text-align:center">Common questions</p>
+  <h2 class="section-h" style="text-align:center">FAQ</h2>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-q">Do I need any special software?</div>
+      <div class="faq-a">No. The tool is an Excel file (.xlsx) that works in Microsoft Excel (2016 or later) and Google Sheets. No plugins, no subscriptions, no additional software required.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How long does it take to complete?</div>
+      <div class="faq-a">Most users complete the questionnaire in 45–90 minutes. If you need to gather information from production records or colleagues first, allow a few hours. The dashboard and action log populate instantly as you answer.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Which certification standards does it cover?</div>
+      <div class="faq-a">The tool is mapped to IFS Food v8, BRCGS Food Safety, FSSC 22000 v6, ISO 22000:2018, and EU Regulation 178/2002 (General Food Law). Each question references the relevant standard requirements.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Is this a guarantee of audit success?</div>
+      <div class="faq-a">No tool can guarantee audit outcomes. The Stress Test gives you an honest, structured view of where your system sits — so you can address gaps before the auditor finds them. It is a preparation tool, not a certification service.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I use it for multiple sites or share it with colleagues?</div>
+      <div class="faq-a">Each purchase covers a single-user licence. For multi-site use or team licences, contact us at info@foodauditlab.com and we'll work out the right arrangement.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Who built this tool?</div>
+      <div class="faq-a">FoodAuditLab tools are built by a practising food safety auditor with experience across GFSI-recognised certification schemes. The questions and red flags come directly from real audit findings — not from reading standards alone.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ CTA ═══════════════════════════════════════════════════════════ -->
+<section id="cta">
+  <h2 class="cta-h serif">Find your gaps.<br>Before the auditor does.</h2>
+  <p class="cta-p">
+    38 questions. Auto-scoring dashboard. Maturity level. System Stability Index.
+    Prioritised action log. Everything you need in one Excel file.
+  </p>
+  <div class="cta-btns">
+    <a href="https://payhip.com/b/yfdoR" class="btn btn-primary"
+       style="font-size:17px;padding:16px 44px" target="_blank">
+      Get Traceability Stress Test — €79
+    </a>
+    <a href="index.html#library" class="btn btn-ghost"
+       style="font-size:17px;padding:16px 32px">
+      Browse all tools
+    </a>
+  </div>
+  <p class="cta-note">
+    Excel (.xlsx) · Works in Microsoft Excel &amp; Google Sheets ·
+    <b>Instant download</b> · No setup required
+  </p>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="foot-brand serif">FoodAudit<span>Lab</span></div>
+  <div class="foot-center">
+    foodauditlab.com · info@foodauditlab.com<br>
+    <span style="font-size:12px">Excel (.xlsx) · Instant download · BRCGS · FSSC 22000 · IFS Food</span>
+  </div>
+  <div class="foot-tagline serif">"What auditors look for — before they arrive."</div>
+</footer>
+
+</body>
+</html>
